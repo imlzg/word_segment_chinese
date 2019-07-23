@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="segment" default="default" basedir=".">
+
+    <property name="name" value="segment"/>
+    <property name="dir.src" value="src"/>
+    <property name="dir.out" value="../out/production/${name}"/>
+    <property name="dir.lib" value=""/>
+    <property name="dir.dist" value="/home/george/develop/dist/kevin/"/>
+    <property name="file.jar" value="${dir.dist}/kevin-${name}.jar"/>
+
+    <property name="log" value="/home/george/develop/lib/log/"/>
+    <property name="lucene" value="/home/george/develop/lib/lucene/"/>
+    <property name="utility" value="/home/george/develop/dist/kevin/kevin-utility.jar"/>
+
+    <path id="classpath">
+        <fileset dir="${log}" includes="**/*.jar"/>
+        <fileset dir="${lucene}" includes="**/*.jar"/>
+        <pathelement location="${utility}"/>
+        <pathelement location="${dir.out}"/>
+        <fileset dir="${dir.lib}" includes="**/*.jar"/>
+    </path>
+
+
+    <target name="default" depends="dist" description="default: distribute project"/>
+
+    <target name="clean" description="Remove all outputs">
+        <delete dir="${dir.out}"/>
+        <delete file="${file.jar}"/>
+    </target>
+
+    <target name="compile" depends="clean" description="Generate outputs">
+        <mkdir dir="${dir.out}"/>
+        <javac srcdir="${dir.src}" destdir="${dir.out}" classpathref="classpath" debug="on" deprecation="on" fork="on" optimize="on"/>
+        <copy todir="${dir.out}" preservelastmodified="true">
+            <fileset dir="${dir.src}" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="dist" depends="compile" description="Distribute project (jars etc)">
+        <jar destfile="${file.jar}" filesonly="false">
+            <manifest>
+                <attribute name="Created-By" value="gaozou.org"/>
+                <attribute name="Manifest-Version" value="1.0"/>
+            </manifest>
+            <fileset dir="${dir.out}"/>
+        </jar>
+    </target>
+
+</project>
